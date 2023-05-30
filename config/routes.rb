@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   delete "/adminout", to: "sessions#out"
   get "/ad", to: "admins#show"
   post "/newadmin", to: "admins#create"
+  patch "/admins", to: "admins#update"
 
 
   # USERs routes
