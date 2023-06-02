@@ -71,3 +71,5 @@ gem "jwt"
 gem "rack-cors"
 
 gem "jsonapi-serializer", "~> 2.2"
+
+gem "cloudinary"
