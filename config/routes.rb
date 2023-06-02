@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :airbnbs
   resources :users
   resources :admins
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -36,5 +37,14 @@ Rails.application.routes.draw do
   post "/users", to: "users#create"
   patch "/users/:id", to: "users#update"
   delete "/users/:id", to: "users#destroy"
+
+  # AIRBNB routes
+  get "/airbnbs", to: "airbnbs#index"
+  get "/airbnbs/:id", to: "airbnbs#show"
+  post "/airbnbs", to: "airbnbs#create"
+  patch "/airbnbs/:id", to: "airbnbs#update"
+  delete "/airbnbs/:id", to: "airbnbs#destroy"
+
+  
 
 end

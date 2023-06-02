@@ -33,41 +33,8 @@ class AdminsController < ApplicationController
     end
   end
 
-  # def update
-  #   admin = Admin.find_by(id: params[:id])
-  #   if admin
-  #     if params[:image].present?
-  #       begin
-  #         image = Cloudinary::Uploader.upload(params[:image])
-  #         admin.image = image["url"]
-  #       rescue => e
-  #         render json: { error: "Failed to upload image: #{e.message}" }, status: :unprocessable_entity
-  #         return
-  #       end
-  #     end
-
-  #     if admin.update(admin_params)
-  #       render json: admin, status: :ok
-  #     else
-  #       render json: { error: "Failed to update admin" }, status: :unprocessable_entity
-  #     end
-  #   else
-  #     render json: { error: "Admin with id #{params[:id]} not found" }, status: :not_found
-  #   end
-  # end
-
-  # def create
-  #   admin = Admin.new(admin_params)
-  #   if admin.save
-  #     render json: admin.as_json(except: [:image]), status: :created
-  #   else
-  #     render json: { error: admin.errors.full_messages.join(", ") }, status: :unprocessable_entity
-  #   end
-  # end
-
   def update
     admin = Admin.find(params[:id])
-
     # Update Cloudinary image using admin_params
     if admin_params[:image].is_a?(ActionDispatch::Http::UploadedFile)
       result = Cloudinary::Uploader.upload(admin_params[:image].tempfile.path)
