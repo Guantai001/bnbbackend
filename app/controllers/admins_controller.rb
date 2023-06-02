@@ -6,7 +6,7 @@ class AdminsController < ApplicationController
   # get all Admins
   def index
     admin = Admin.all
-    render json: admin, status: :ok
+    render json: admin
   end
 
   # get one Admin
@@ -20,45 +20,64 @@ class AdminsController < ApplicationController
   end
 
   # create new Admin
-  def update
-    admin = Admin.find(params[:id])
-    if admin.update(admin_params)
-      if params[:image].present?
-        image = Cloudinary::Uploader.upload(params[:image])
-        admin.image = image["url"]
-      elsif !admin.image.blank?
-        # Keep the existing image if no new image is provided
-        admin.image = admin.image
-      end
-      admin.save
-      render json: admin, status: :ok
+  def create
+    admin = Admin.new(admin_params)
+    if params[:image].present?
+      image = Cloudinary::Uploader.upload(params[:image])
+      admin.image = image["url"]
+    end
+    if admin.save
+      render json: admin, status: :created
     else
-      render json: { error: "Admin not updated" }, status: :unprocessable_entity
+      render json: { error: "Admin not created" }, status: :unprocessable_entity
     end
   end
 
+  # def update
+  #   admin = Admin.find_by(id: params[:id])
+  #   if admin
+  #     if params[:image].present?
+  #       begin
+  #         image = Cloudinary::Uploader.upload(params[:image])
+  #         admin.image = image["url"]
+  #       rescue => e
+  #         render json: { error: "Failed to upload image: #{e.message}" }, status: :unprocessable_entity
+  #         return
+  #       end
+  #     end
+
+  #     if admin.update(admin_params)
+  #       render json: admin, status: :ok
+  #     else
+  #       render json: { error: "Failed to update admin" }, status: :unprocessable_entity
+  #     end
+  #   else
+  #     render json: { error: "Admin with id #{params[:id]} not found" }, status: :not_found
+  #   end
+  # end
+
+  # def create
+  #   admin = Admin.new(admin_params)
+  #   if admin.save
+  #     render json: admin.as_json(except: [:image]), status: :created
+  #   else
+  #     render json: { error: admin.errors.full_messages.join(", ") }, status: :unprocessable_entity
+  #   end
+  # end
+
   def update
-    admin = Admin.find_by(id: params[:id])
+    admin = Admin.find(params[:id])
 
-    if admin
-      if params[:image].present?
-        begin
-          image = Cloudinary::Uploader.upload(params[:image].tempfile.path)  # Use the uploaded file's path
-          admin.image = image["url"]
-        rescue => e
-          render json: { error: "Failed to upload image: #{e.message}" }, status: :unprocessable_entity
-          return
-        end
-      end
-
-      if admin.update(admin_params)
-        render json: admin, status: :accepted
-      else
-        render json: { error: "Failed to update admin" }, status: :unprocessable_entity
-      end
-    else
-      render json: { error: "Admin with id #{params[:id]} not found" }, status: :not_found
+    # Update Cloudinary image using admin_params
+    if admin_params[:image].is_a?(ActionDispatch::Http::UploadedFile)
+      result = Cloudinary::Uploader.upload(admin_params[:image].tempfile.path)
+      admin.image = result["secure_url"]
     end
+
+    # Update other attributes
+    admin.update(admin_params.except(:image))
+
+    render json: admin, status: :accepted
   end
 
   # delete Admin
@@ -79,5 +98,10 @@ class AdminsController < ApplicationController
 
   def render_unprocessable_entity_response(exception)
     render json: { errors: exception.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def extract_file_path(image_string)
+    match_data = image_string.match(/#\&lt;ActionDispatch::Http::UploadedFile:\S+\s+\S+([^\s>]+)/)
+    match_data[1] if match_data
   end
 end

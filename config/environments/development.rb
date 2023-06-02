@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -33,7 +34,8 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :cloudinary
+  Rails.application.routes.default_url_options = { host: "http://localhost:4000" }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -57,6 +59,8 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
+
+  # config.active_storage.service = :cloudinary
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
