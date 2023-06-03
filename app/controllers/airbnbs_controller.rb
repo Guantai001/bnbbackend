@@ -19,21 +19,8 @@ class AirbnbsController < ApplicationController
     end
   end
 
-  # create new Airbnb
   def create
     airbnb = Airbnb.new(airbnb_params)
-
-    if params[:images].present?
-      images = []
-
-      params[:images].each do |image|
-        uploaded_image = Cloudinary::Uploader.upload(image)
-        images << uploaded_image["url"]
-      end
-
-      airbnb.images = images
-    end
-
     if airbnb.save
       render json: airbnb, status: :created
     else
@@ -43,15 +30,11 @@ class AirbnbsController < ApplicationController
 
   def update
     airbnb = Airbnb.find(params[:id])
-    # Update Cloudinary image using airbnb_params
-    if airbnb_params[:image].is_a?(ActionDispatch::Http::UploadedFile)
-      result = Cloudinary::Uploader.upload(airbnb_params[:image].tempfile.path)
-      airbnb.image = result["secure_url"]
+    if airbnb.update(airbnb_params)
+      render json: airbnb, status: :accepted
+    else
+      render json: { error: "Airbnb not updated" }, status: :unprocessable_entity
     end
-    # Update other attributes
-    airbnb.update(airbnb_params.except(:image))
-
-    render json: airbnb, status: :accepted
   end
 
   # delete Airbnb
@@ -67,6 +50,6 @@ class AirbnbsController < ApplicationController
   private
 
   def airbnb_params
-    params.permit(:name, :location, :price, :beds, :description, :amenity, :category, :admin_id, images: [])
+    params.permit(:name, :location, :price, :beds, :category, :description, :amenity, :admin_id)
   end
 end

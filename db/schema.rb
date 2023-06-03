@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_02_173333) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_03_161154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,13 +51,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_02_173333) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "airbnb_images", force: :cascade do |t|
+    t.string "image"
+    t.bigint "airbnb_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["airbnb_id"], name: "index_airbnb_images_on_airbnb_id"
+  end
+
   create_table "airbnbs", force: :cascade do |t|
     t.string "name"
     t.string "location"
     t.integer "price"
     t.integer "beds"
     t.text "description"
-    t.string "image"
+    t.string "images"
     t.string "amenity"
     t.string "category"
     t.bigint "admin_id", null: false
@@ -76,5 +84,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_02_173333) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "airbnb_images", "airbnbs"
   add_foreign_key "airbnbs", "admins"
 end

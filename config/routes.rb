@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :airbnb_images
   resources :airbnbs
   resources :users
   resources :admins
@@ -44,6 +45,13 @@ Rails.application.routes.draw do
   post "/airbnbs", to: "airbnbs#create"
   patch "/airbnbs/:id", to: "airbnbs#update"
   delete "/airbnbs/:id", to: "airbnbs#destroy"
+
+  # AIRBNB IMAGES routes
+  get "/airbnb_images", to: "airbnb_images#index"
+  get "/airbnb_images/:id", to: "airbnb_images#show"
+  post "/airbnb_images", to: "airbnb_images#create"
+  patch "/airbnb_images/:id", to: "airbnb_images#update"
+  delete "/airbnb_images/:id", to: "airbnb_images#destroy"
 
   
 
