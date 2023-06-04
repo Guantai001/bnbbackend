@@ -50,6 +50,6 @@ class AirbnbsController < ApplicationController
   private
 
   def airbnb_params
-    params.permit(:name, :location, :price, :beds, :category, :description, :amenity, :admin_id)
+    params.permit(:name, :location, :price, :beds, :category, :description,  :admin_id)
   end
 end

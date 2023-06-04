@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_03_161154) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_04_071703) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,13 +65,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_161154) do
     t.integer "price"
     t.integer "beds"
     t.text "description"
-    t.string "images"
-    t.string "amenity"
     t.string "category"
     t.bigint "admin_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["admin_id"], name: "index_airbnbs_on_admin_id"
+  end
+
+  create_table "amenities", force: :cascade do |t|
+    t.string "item1"
+    t.string "item2"
+    t.string "item3"
+    t.string "item4"
+    t.string "item5"
+    t.string "item6"
+    t.bigint "airbnb_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["airbnb_id"], name: "index_amenities_on_airbnb_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -86,4 +97,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_161154) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "airbnb_images", "airbnbs"
   add_foreign_key "airbnbs", "admins"
+  add_foreign_key "amenities", "airbnbs"
 end

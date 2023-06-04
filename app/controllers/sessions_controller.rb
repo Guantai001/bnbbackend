@@ -13,14 +13,13 @@ class SessionsController < ApplicationController
         render json: { loggedin: true, admin: user_or_admin, jwt: token }, status: :accepted
       end
     else
-      render json: { error: 'Invalid email or password' }, status: :unauthorized
+      render json: { error: "Invalid email or password" }, status: :unauthorized
     end
   end
 
-
   def destroy
     cookies.delete(:jwt_token)
-    render json: { message: 'Logged out successfully' }
+    render json: { message: "Logged out successfully" }
   end
 
   private
@@ -29,4 +28,3 @@ class SessionsController < ApplicationController
     params.permit(:email, :password)
   end
 end
-

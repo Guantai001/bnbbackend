@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :amenities
   resources :airbnb_images
   resources :airbnbs
   resources :users
@@ -8,29 +9,24 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
+  get "/login", to: "sessions#index"
+  post "/login", to: "sessions#create"
+  get "/login/:id", to: "sessions#show"
+  post "/user_login", to: "sessions#create_user"
 
+  delete "/logout", to: "sessions#destroy"
 
-
-  get '/login', to: 'sessions#index'
-  post '/login', to: 'sessions#create'
-  get '/login/:id', to: 'sessions#show'
-  post '/user_login', to: "sessions#create_user"
-
-
-  delete '/logout', to: "sessions#destroy"
-
-  post '/admin/create', to: 'admins#create'
+  post "/admin/create", to: "admins#create"
 
   # admin
-  post 'admin/login', to: 'admin#login'
-  post '/login', to: 'admin#login'
-  post '/signup', to: 'admin#signup'
+  post "admin/login", to: "admin#login"
+  post "/login", to: "admin#login"
+  post "/signup", to: "admin#signup"
   post "/adminin", to: "sessions#in"
   delete "/adminout", to: "sessions#out"
   get "/ad", to: "admins#show"
   post "/newadmin", to: "admins#create"
   patch "/admins", to: "admins#update"
-
 
   # USERs routes
   get "/users", to: "users#index"
@@ -53,6 +49,10 @@ Rails.application.routes.draw do
   patch "/airbnb_images/:id", to: "airbnb_images#update"
   delete "/airbnb_images/:id", to: "airbnb_images#destroy"
 
-  
-
+  # AMENITIES routes
+  get "/amenities", to: "amenities#index"
+  get "/amenities/:id", to: "amenities#show"
+  post "/amenities", to: "amenities#create"
+  patch "/amenities/:id", to: "amenities#update"
+  delete "/amenities/:id", to: "amenities#destroy"
 end
