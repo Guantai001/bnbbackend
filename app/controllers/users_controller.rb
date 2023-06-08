@@ -1,44 +1,70 @@
 class UsersController < ApplicationController
-    skip_before_action :authorized, only: [:create, :loggedin, :index, :show, :update, :destroy]
-    
-    def index
-        user = User.all
-        render json: user
+  skip_before_action :authorized, only: [:create, :loggedin, :index, :show, :update, :destroy]
+
+  def index
+    user = User.all
+    render json: user
+  end
+
+  def show
+    user = User.find_by(id: params[:id])
+    # include user's services and books
+    render json: user, include: [:services, :books]
+  end
+
+  # def create
+  #     user = User.create(user_params)
+  #     if user.valid?
+  #       render json: { user: user }, status: :created
+  #     else
+  #       render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
+  #     end
+  #   end
+
+  # def update
+  #     user = User.find_by(id: params[:id])
+  #     user.update(user_params)
+  # end
+
+  # create new user
+  def create
+    user = User.new(user_params)
+    if params[:image].present?
+      image = Cloudinary::Uploader.upload(params[:image])
+      user.image = image["url"]
+    end
+    if user.save
+      render json: user, status: :created
+    else
+      render json: { error: "user not created" }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    user = User.find(params[:id])
+    # Update Cloudinary image using user_params
+    if user_params[:image].is_a?(ActionDispatch::Http::UploadedFile)
+      result = Cloudinary::Uploader.upload(user_params[:image].tempfile.path)
+      user.image = result["secure_url"]
     end
 
-    def show
-       user = User.find_by(id: params[:id])
-        # include user's services and books
-        render json: user, include: [:services, :books]
-    end
+    # Update other attributes
+    user.update(user_params.except(:image))
 
-    def create
-        user = User.create(user_params)
-        if user.valid?
-          render json: { user: user }, status: :created
-        else
-          render json: { error: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
-        end
-      end
+    render json: user, status: :accepted
+  end
 
-    def update
-        user = User.find_by(id: params[:id])
-        user.update(user_params)
-    end
+  def destroy
+    @user.destroy
+  end
 
-    def destroy
-        @user.destroy
-    end
-        
+  private
 
-    private
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    def set_user
-        @user = User.find(params[:id])
-    end
-
-    def user_params
-        params.permit(:name, :email, :password , :password_confirmation)
-    end
-
+  def user_params
+    params.permit(:name, :email, :password, :password_confirmation, :image)
+  end
 end

@@ -1,11 +1,11 @@
-class SessionsController < ApplicationController
+class AdminsessionsController < AdminsController
   skip_before_action :authorized, only: [:create]
 
   def create
-    user = User.find_by(email: params[:email])
-    if user && user.authenticate(params[:password])
-      token = encode_token({ user_id: user.id })
-      render json: { loggedin: true, user: user, jwt: token }, status: :accepted
+    admin = Admin.find_by(email: params[:email])
+    if admin && admin.authenticate(params[:password])
+      token = encode_token({ admin_id: admin.id })
+      render json: { loggedin: true, admin: admin, jwt: token }, status: :accepted
     else
       render json: { error: "Invalid email or password" }, status: :unauthorized
     end

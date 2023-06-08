@@ -10,14 +10,21 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  get "/login", to: "sessions#index"
-  post "/login", to: "sessions#create"
-  get "/login/:id", to: "sessions#show"
-  post "/user_login", to: "sessions#create_user"
+  # get "/login", to: "sessions#index"
+  # post "/adminlogin", to: "sessions#create"
+  # get "/login/:id", to: "sessions#show"
+  # post "/user_login", to: "sessions#create_user"
+  # delete "/logout", to: "sessions#destroy"
+  # post "/admin/create", to: "admins#create"
 
-  delete "/logout", to: "sessions#destroy"
+  # admin login route
+  post "/admin/login", to: "adminsessions#create"
+  delete "/admin/logout", to: "adminsessions#destroy"
 
-  post "/admin/create", to: "admins#create"
+  # user login route
+  post "/user/login", to: "sessions#create"
+  delete "/user/logout", to: "sessions#destroy"
+  post "/user/signup", to: "users#create"
 
   # admin
   post "admin/login", to: "admin#login"
@@ -63,5 +70,4 @@ Rails.application.routes.draw do
   post "/bookings", to: "bookings#create"
   patch "/bookings/:id", to: "bookings#update"
   delete "/bookings/:id", to: "bookings#destroy"
-  
 end
