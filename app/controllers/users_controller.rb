@@ -29,14 +29,18 @@ class UsersController < ApplicationController
   # create new user
   def create
     user = User.new(user_params)
+
     if params[:image].present?
       image = Cloudinary::Uploader.upload(params[:image])
       user.image = image["url"]
     end
-    if user.save
+
+    if user.password != user.password_confirmation
+      render json: { error: "Password and password confirmation do not match" }, status: :unprocessable_entity
+    elsif user.save
       render json: user, status: :created
     else
-      render json: { error: "user not created" }, status: :unprocessable_entity
+      render json: { error: "User not created" }, status: :unprocessable_entity
     end
   end
 
@@ -65,6 +69,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:name, :email, :password, :password_confirmation, :image)
+    params.permit(:name, :email, :password, :image, :password_confirmation)
   end
 end
