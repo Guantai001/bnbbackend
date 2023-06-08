@@ -1,7 +1,7 @@
 class AdminsController < ApplicationController
   skip_before_action :authorized, only: [:index, :create, :show, :update, :destroy]
 
-  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+  rescue_from ActiveRecord::RecordInvalid, with: :render_upnrocessable_entity_response
 
   # get all Admins
   def index

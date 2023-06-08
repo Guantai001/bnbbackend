@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   skip_before_action :authorized, only: [:create, :loggedin, :index, :show, :update, :destroy]
+  rescue_from ActiveRecord::RecordInvalid, with: :render_upnrocessable_entity_response
 
   def index
     user = User.all
@@ -64,11 +65,16 @@ class UsersController < ApplicationController
 
   private
 
-  def set_user
-    @user = User.find(params[:id])
-  end
-
   def user_params
     params.permit(:name, :email, :password, :image, :password_confirmation)
+  end
+
+  def render_unprocessable_entity_response(exception)
+    render json: { errors: exception.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def extract_file_path(image_string)
+    match_data = image_string.match(/#\&lt;ActionDispatch::Http::UploadedFile:\S+\s+\S+([^\s>]+)/)
+    match_data[1] if match_data
   end
 end
