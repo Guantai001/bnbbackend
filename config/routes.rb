@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :reservations
   resources :bookings
   resources :amenities
   resources :airbnb_images
@@ -70,4 +71,13 @@ Rails.application.routes.draw do
   post "/bookings", to: "bookings#create"
   patch "/bookings/:id", to: "bookings#update"
   delete "/bookings/:id", to: "bookings#destroy"
+
+
+  # RESERVATIONS routes
+  get "/reservations", to: "reservations#index"
+  get "/reservations/:id", to: "reservations#show"
+  post "/reservations", to: "reservations#create"
+  patch "/reservations/:id", to: "reservations#update"
+  delete "/reservations/:id", to: "reservations#destroy"
+  
 end

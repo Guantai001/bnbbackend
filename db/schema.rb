@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_05_145058) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_13_050304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,6 +98,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_05_145058) do
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
+  create_table "reservations", force: :cascade do |t|
+    t.string "from_date"
+    t.string "to_date"
+    t.integer "estimated_amount"
+    t.integer "difference_in_nights"
+    t.bigint "user_id", null: false
+    t.bigint "airbnb_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["airbnb_id"], name: "index_reservations_on_airbnb_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -114,4 +127,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_05_145058) do
   add_foreign_key "amenities", "airbnbs"
   add_foreign_key "bookings", "airbnbs"
   add_foreign_key "bookings", "users"
+  add_foreign_key "reservations", "airbnbs"
+  add_foreign_key "reservations", "users"
 end

@@ -3,4 +3,5 @@ class Airbnb < ApplicationRecord
   has_many :airbnb_images, dependent: :destroy
   has_many :amenities, dependent: :destroy
   has_many :bookings, dependent: :destroy 
+  has_many :reservations
 end
