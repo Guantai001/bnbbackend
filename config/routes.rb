@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :mpesas
   resources :reservations
   resources :bookings
   resources :amenities
@@ -7,6 +8,9 @@ Rails.application.routes.draw do
   resources :users
   resources :admins
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  post "/stkpush", to: "mpesas#stkpush"
+  post "/stkquery", to: "mpesas#stkquery"
 
   # Defines the root path route ("/")
   # root "articles#index"
@@ -72,12 +76,10 @@ Rails.application.routes.draw do
   patch "/bookings/:id", to: "bookings#update"
   delete "/bookings/:id", to: "bookings#destroy"
 
-
   # RESERVATIONS routes
   get "/reservations", to: "reservations#index"
   get "/reservations/:id", to: "reservations#show"
   post "/reservations", to: "reservations#create"
   patch "/reservations/:id", to: "reservations#update"
   delete "/reservations/:id", to: "reservations#destroy"
-  
 end

@@ -73,3 +73,10 @@ gem "rack-cors"
 gem "jsonapi-serializer", "~> 2.2"
 
 gem "cloudinary"
+
+gem "rest-client", "~> 2.1"
+
+gem "rack", "~> 2.2"
+# gem "cors", "~> 1.0"
+gem "uri"
+gem "json"
