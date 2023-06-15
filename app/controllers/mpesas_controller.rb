@@ -21,8 +21,8 @@ class MpesasController < ApplicationController
       'PartyB': business_short_code,
       'PhoneNumber': phoneNumber,
       'CallBackURL': "#{ENV["CALLBACK_URL"]}/callback_url",
-      'AccountReference': "Codearn",
-      'TransactionDesc': "Payment for Codearn premium",
+      'AccountReference': "GUAN BNB",
+      'TransactionDesc': "Payment for Guan Bnb",
     }.to_json
 
     headers = {
